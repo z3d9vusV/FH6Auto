@@ -1062,7 +1062,7 @@ class FH_UltimateBot(ctk.CTk):
         self.lbl_mini_time = ctk.CTkLabel(self.mini_info_frame, text="Total Duration: 00:00:00", font=ctk.CTkFont(size=13))
         self.lbl_mini_time.pack(pady=2, anchor="w")
         # 3. Button area (arranged on the right)
-        self.btn_mini_stop = ctk.CTkButton(self.mini_frame, text="⏸ Pause (F8)", fg_color="#DA3633", hover_color="#B02A37", width=90, font=ctk.CTkFont(weight="bold"), command=self.stop_all)
+        self.btn_mini_stop = ctk.CTkButton(self.mini_frame, text="⏸ Stop (F8)", fg_color="#DA3633", hover_color="#B02A37", width=90, font=ctk.CTkFont(weight="bold"), command=self.stop_all)
         self.btn_mini_stop.pack(side="left", fill="y", padx=5, pady=10)
 
         self.btn_mini_support = ctk.CTkButton(self.mini_frame, text="❤ Support", fg_color="#F97316", hover_color="#EA580C", width=60, font=ctk.CTkFont(weight="bold"), command=self.open_support_window)
