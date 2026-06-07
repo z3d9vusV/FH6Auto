@@ -75,8 +75,7 @@ Please first purchase a **Subaru Impreza 22B-STi Version** for map running and c
 #### Recommended checks before use
 - **Disable any filters, HDR or other features that affect colour**
 - Ensure the game has launched correctly
-- Set the game language to **Simplified Chinese**
-- Switch the keyboard layout to **English keyboard**
+- Ensure the keyboard layout is **English keyboard**
 - In-game settings: **Auto-steer**, **Automatic transmission**, difficulty set to **Unstoppable**
 - Keep the game interface as stable as possible
 - Do not switch to other windows arbitrarily, as this may affect image recognition results
