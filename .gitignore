@@ -1,17 +1,17 @@
 # ========================
-# 1. 屏蔽所有 Python 源码
+# 1. Hide all Python source code
 # ========================
 
 
 # ========================
-# 2. 屏蔽本地配置文件和日志
+# 2. Disable local configuration files and logs
 # ========================
 bot_config.json
 bot_log.txt
 *.ahk
 
 # ========================
-# 3. 屏蔽打包的临时过程文件和内部资源
+# 3. Block temporary process files and internal resources in the package.
 # ========================
 build/
 obf_temp/
@@ -24,9 +24,9 @@ bk/
 debug/
 
 # ========================
-# 4. 允许上传的内容（这部分不写，Git会自动识别）
+# 4. Allowed content to be uploaded (This part is omitted as Git will automatically identify it)
 # ========================
-# 我们要保留：
-# - dist/ 文件夹 (你的exe)
-# - images/ 文件夹 (外部截图)
-# - version.json (你的更新文件)
+# We want to keep:
+# - dist/ folder (your exe)
+# - images/ folder (external screenshots)
+# - version.json (your update file)
