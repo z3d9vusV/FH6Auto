@@ -24,7 +24,7 @@
     "restart_cmd": "start steam://run/2483190",
     "sell_mode": 1,
     "use_ocr": false,
-    "ocr_lang": "简体中文",
+    "ocr_lang": "eng",
     "calc_a": "10268096",
     "calc_b": "81700",
     "calc_c": "30"
