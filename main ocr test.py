@@ -1,6 +1,6 @@
 import sys
 import os
-# ====== 【修复 OMP 冲突的核心代码】 ======
+# ====== 【Core code for resolving OMP conflicts】 ======
 os.environ["KMP_DUPLICATE_LIB_OK"] = "TRUE"
 # =======================================
 import json
@@ -10,7 +10,7 @@ import ctypes
 import subprocess
 import webbrowser
 
-# 【极其关键】：必须在任何 UI 库导入之前设置 DPI 感知
+#  [Critical]: DPI awareness must be configured before importing any UI library
 try:
     ctypes.windll.shcore.SetProcessDpiAwareness(2)  # Win 8.1+
 except Exception:
@@ -37,9 +37,9 @@ import difflib
 
 
 # ==========================================
-# --- 路径与资源策略 ---
-# assets: 只读内置，禁止本地覆盖
-# images: 打包进 exe，启动时若外部无 images 则自动释放；识图优先读外部 images
+# --- Paths and Resource Policies ---
+# assets: Read-only built-in; local overwriting is prohibited
+# images: Packed into the EXE; if no external images are present at launch, they are automatically released; image recognition gives priority to reading external images
 # ==========================================
 def get_app_dir():
     if getattr(sys, "frozen", False):
@@ -55,12 +55,12 @@ def get_internal_dir():
 
 APP_DIR = get_app_dir()
 INTERNAL_DIR = get_internal_dir()
-# 【新增 config 目录路径】
+# [Added config directory path]
 CONFIG_DIR = os.path.join(APP_DIR, "config")
-USER_CONFIG_FILE = os.path.join(APP_DIR, "config.json")      # <--- 全面替换为 config.json
+USER_CONFIG_FILE = os.path.join(APP_DIR, "config.json")      # <--- Replace entirely with config.json
 SYSTEM_OCR_FILE = os.path.join(CONFIG_DIR, "ocr_targets.json")
 LOG_FILE = os.path.join(APP_DIR, "bot_log.txt")
-# 增加 OCR 模型路径配置
+# Add OCR model path configuration
 CACHE_DIR = os.path.join(APP_DIR, "cache")
 OCR_MODELS_DIR = os.path.join(APP_DIR, "ocr_models")
 TEMPLATE_CACHE_FILE = os.path.join(CACHE_DIR, "template_cache.pkl")
@@ -69,13 +69,13 @@ CURRENT_VERSION = "1.1.4"
 def auto_extract_configs():
     os.makedirs(CONFIG_DIR, exist_ok=True)
     
-    # ====== 【新增：向下兼容，自动重命名并迁移老版本 bot_config】 ======
+    # ====== [New: Backward compatibility; automatically renames and migrates old bot_config files] ======
     old_configs = [
         os.path.join(APP_DIR, "bot_config.json"),
         os.path.join(APP_DIR, "bot-config.json"),
         os.path.join(CONFIG_DIR, "bot-config.json"),
         os.path.join(CONFIG_DIR, "bot_config.json"),
-        os.path.join(CONFIG_DIR, "config.json")  # <-- 如果之前在 config 文件夹里，就移到外面
+        os.path.join(CONFIG_DIR, "config.json")  # <-- If it was previously in the config folder, move it out
     ]
     for old_path in old_configs:
         if os.path.exists(old_path):
