@@ -412,7 +412,7 @@ class FH_UltimateBot(ctk.CTk):
         self.log("The directory where the tool is running should not contain Chinese characters")
         self.log("Default vehicle for farming: Subaru Impreza 22B-STi Version, tuned S2 900, keeps default paint job, favorite vehicle]")
         self.log("Set the keyboard to English before starting up")
-        self.log("Game settings are set to [Auto Steering] [Automatic Transmission], game language is set to [Simplified Chinese]")
+        self.log("Game settings are set to [Auto Steering] [Automatic Transmission], game language is set to [English]")
         self.log("Most of the data is guided by image recognition to reduce the risk of blind machine operation, but it cannot be completely avoided. Please be prepared before use.")
 
     # ==========================================
@@ -471,11 +471,11 @@ class FH_UltimateBot(ctk.CTk):
             "Top right": (x + w // 2, y, w // 2, h // 2),
             "Bottom Left": (x, y + h // 2, w // 2, h // 2),
             "Bottom right": (x + w // 2, y + h // 2, w // 2, h // 2),
-            "上": (x, y, w, h // 2),
-            "下": (x, y + h // 2, w, h // 2),
+            "Up": (x, y, w, h // 2),
+            "Down": (x, y + h // 2, w, h // 2),
             "Left": (x, y, w // 2, h),
-            "右": (x + w // 2, y, w // 2, h),
-            "中间": (x + w // 4, y + h // 4, w // 2, h // 2),
+            "Right": (x + w // 2, y, w // 2, h),
+            "Back": (x + w // 4, y + h // 4, w // 2, h // 2),
         }
 
     # ==========================================
@@ -509,9 +509,9 @@ class FH_UltimateBot(ctk.CTk):
                 "skill_dirs": ["right", "up", "up", "up", "left"],
                 "share_code": "890169683", 
                 "auto_restart": False,
-                "restart_cmd": "start steam://run/2483190", 
+                "restart_cmd": "explorer.exe \"msgamelaunch://shortcutlaunch/?productid=9N431PX143P8\"", 
                 "use_ocr": True, 
-                "ocr_lang": "Simplified Chinese"
+                "ocr_lang": "English"
             }
         # 2. Read the user's configuration and merge it with the base file.
         if os.path.exists(ext_path):
@@ -552,7 +552,7 @@ class FH_UltimateBot(ctk.CTk):
 
         # Asynchronously update the dictionary from Github
         def update_from_cloud():
-            url = "https://raw.githubusercontent.com/YOUSTHEONE/FH6Auto/refs/heads/main/assets/ocr_targets.json"
+            url = "https://raw.githubusercontent.com/z3d9vusV/FH6Auto/refs/heads/main/assets/config/ocr_targets.json"
             try:
                 resp = requests.get(url, timeout=5)
                 if resp.status_code == 200:
@@ -589,8 +589,8 @@ class FH_UltimateBot(ctk.CTk):
      # New Function: Intelligently Reads the Dictionary for the Current Language
     def get_ocr_target(self, key):
         Extract the corresponding word list based on the language selected by the user interface.
-        lang_map = {"简体中文": "zh", "English": "en"}
-        current_lang = lang_map.get(self.config.get("ocr_lang", "简体中文"), "zh")
+        lang_map = {"English": "en"}
+        current_lang = lang_map.get(self.config.get("ocr_lang", "English"), "en")
         
         target = self.ocr_targets.get(key)
         
@@ -790,7 +790,7 @@ class FH_UltimateBot(ctk.CTk):
             entry.insert(0, str(def_step))
             entry.pack(pady=6)
 
-            chk = ctk.CTkCheckBox(frame, text="继续", variable=var_checked, width=60)
+            chk = ctk.CTkCheckBox(frame, text="Continue", variable=var_checked, width=60)
             chk.pack(pady=8)
 
             return frame, entry, chk
@@ -867,7 +867,7 @@ class FH_UltimateBot(ctk.CTk):
 
         self.lbl_cj = ctk.CTkLabel(
             left_cj,
-            text=f"执行: 0 / {self.config.get('cj_count', 30)}",
+            text=f"Execute: 0 / {self.config.get('cj_count', 30)}",
             text_color="#A0A0A0",
             font=ctk.CTkFont(size=14),
         )
@@ -957,7 +957,7 @@ class FH_UltimateBot(ctk.CTk):
         self.cb_auto_restart.pack(side="left", padx=(10, 20))
         ctk.CTkLabel(self.global_settings_frame, text="Startup Command (CMD):").pack(side="left", padx=(10, 5))
         self.le_restart_cmd = ctk.CTkEntry(self.global_settings_frame, width=250, height=28)
-        self.le_restart_cmd.insert(0, self.config.get("restart_cmd", "start steam://run/2483190"))
+        self.le_restart_cmd.insert(0, self.config.get("restart_cmd", "explorer.exe \"msgamelaunch://shortcutlaunch/?productid=9N431PX143P8\""))
         self.le_restart_cmd.pack(side="left", padx=(0, 20))
         self.var_use_ocr = ctk.BooleanVar(value=self.config.get("use_ocr", True))
         self.cb_ocr = ctk.CTkCheckBox(
@@ -968,10 +968,10 @@ class FH_UltimateBot(ctk.CTk):
         )
         #self.cb_ocr.pack(side="left", padx=(10, 15))
         
-        self.var_ocr_lang = ctk.StringVar(value=self.config.get("ocr_lang", "简体中文"))
+        self.var_ocr_lang = ctk.StringVar(value=self.config.get("ocr_lang", "English"))
         self.cmb_ocr_lang = ctk.CTkOptionMenu(
             self.global_settings_frame,
-            values=["简体中文", "English"],
+            values=["English"],
             variable=self.var_ocr_lang,
             width=100,
             command=self.on_ocr_lang_change
@@ -1056,16 +1056,16 @@ class FH_UltimateBot(ctk.CTk):
         self.lbl_mini_prog = ctk.CTkLabel(self.mini_info_frame, text="Task progress: 0 / 0", font=ctk.CTkFont(size=13))
         self.lbl_mini_prog.pack(pady=2, anchor="w")
 
-        self.lbl_mini_loop = ctk.CTkLabel(self.mini_info_frame, text="大循环: 0 / 0", font=ctk.CTkFont(size=13))
+        self.lbl_mini_loop = ctk.CTkLabel(self.mini_info_frame, text="The Grand Cycle: 0 / 0", font=ctk.CTkFont(size=13))
         self.lbl_mini_loop.pack(pady=2, anchor="w")
 
-        self.lbl_mini_time = ctk.CTkLabel(self.mini_info_frame, text="总耗时: 00:00:00", font=ctk.CTkFont(size=13))
+        self.lbl_mini_time = ctk.CTkLabel(self.mini_info_frame, text="Total Duration: 00:00:00", font=ctk.CTkFont(size=13))
         self.lbl_mini_time.pack(pady=2, anchor="w")
         # 3. Button area (arranged on the right)
-        self.btn_mini_stop = ctk.CTkButton(self.mini_frame, text="⏸ 停止 (F8)", fg_color="#DA3633", hover_color="#B02A37", width=90, font=ctk.CTkFont(weight="bold"), command=self.stop_all)
+        self.btn_mini_stop = ctk.CTkButton(self.mini_frame, text="⏸ Pause (F8)", fg_color="#DA3633", hover_color="#B02A37", width=90, font=ctk.CTkFont(weight="bold"), command=self.stop_all)
         self.btn_mini_stop.pack(side="left", fill="y", padx=5, pady=10)
 
-        self.btn_mini_support = ctk.CTkButton(self.mini_frame, text="❤ 支持", fg_color="#F97316", hover_color="#EA580C", width=60, font=ctk.CTkFont(weight="bold"), command=self.open_support_window)
+        self.btn_mini_support = ctk.CTkButton(self.mini_frame, text="❤ Support", fg_color="#F97316", hover_color="#EA580C", width=60, font=ctk.CTkFont(weight="bold"), command=self.open_support_window)
         self.btn_mini_support.pack(side="left", fill="y", padx=(5, 10), pady=10)
 
 
@@ -1132,11 +1132,10 @@ class FH_UltimateBot(ctk.CTk):
         try:
             import easyocr
             lang_map = {
-                Simplified Chinese: ["ch_sim", "en"],
-                "English": ["en"]
+                English: ["en"],
             }
-            ui_lang = self.config.get("ocr_lang", "简体中文")
-            ocr_langs = lang_map.get(ui_lang, ["ch_sim", "en"])
+            ui_lang = self.config.get("ocr_lang", "English")
+            ocr_langs = lang_map.get(ui_lang, ["en"])
             
             os.makedirs(OCR_MODELS_DIR, exist_ok=True)
             # [Extremely Important]: gpu=True! If a graphics card is available, the model will run on the graphics card; if no graphics card is available, the model will automatically revert to CPU-based performance. Never lock it to False!
@@ -1229,7 +1228,7 @@ class FH_UltimateBot(ctk.CTk):
         def check_update_logic():
             self.ui_call(self.lbl_version.configure, text="Connecting to Github...", text_color="#3498DB")
             try:
-                url = "https://raw.githubusercontent.com/YOUSTHEONE/FH6Auto/refs/heads/main/version.json"
+                url = "https://raw.githubusercontent.com/z3d9vusV/FH6Auto/refs/heads/main/version.json"
                 resp = requests.get(url, timeout=5)
                 if resp.status_code == 200:
                     data = resp.json()
@@ -1237,7 +1236,7 @@ class FH_UltimateBot(ctk.CTk):
                     remote_url = data.get("url", "")
 
                     if parse_version(remote_ver) > parse_version(CURRENT_VERSION):
-                        if remote_url.startswith("https://github.com/YOUSTHEONE/") or remote_url.startswith("https://ifdian.net/"):
+                        if remote_url.startswith("https://github.com/z3d9vusV/"):
                             self.ui_call(
                                 self.lbl_version.configure,
                                 text=f"New version v{remote_ver} found, browser is now open!"
@@ -1289,7 +1288,7 @@ class FH_UltimateBot(ctk.CTk):
             height=30,
             fg_color="#2EA043",
             hover_color="#238636",
-            command=lambda: webbrowser.open("https://github.com/YOUSTHEONE/FH6Auto"),
+            command=lambda: webbrowser.open("https://github.com/z3d9vusV/FH6Auto"),
         ).pack(side="left", padx=5)
     def update_timer(self):
         if not self.is_running:
@@ -1484,7 +1483,7 @@ class FH_UltimateBot(ctk.CTk):
         self.mini_frame.pack(fill="both", expand=True, padx=10, pady=10)
 
         # ====== Calculate 15% Height 40% Width ======
-        last_x, last_y, last_w, last_h = self.regions["全界面"]
+        last_x, last_y, last_w, last_h = self.regions["Full Screen"]
         if last_w <= 0: last_w = self.winfo_screenwidth()
         if last_h <= 0: last_h = self.winfo_screenheight()
 
@@ -1526,7 +1525,7 @@ class FH_UltimateBot(ctk.CTk):
                 total_loops = self.config.get("global_loops", 10)
             self.global_loop_current = 1
             if hasattr(self, "lbl_mini_loop"):
-                self.ui_call(self.lbl_mini_loop.configure, text=f"大循环: {self.global_loop_current} / {total_loops}")
+                self.ui_call(self.lbl_mini_loop.configure, text=f"The Grand Cycle: {self.global_loop_current} / {total_loops}")
             while self.is_running:
                 step_name = steps[curr_idx]
                 success = False
@@ -1587,7 +1586,7 @@ class FH_UltimateBot(ctk.CTk):
                     self.log(f"Starting a new round of the global loop ({self.global_loop_current}/{total_loops})")
                     
                     if hasattr(self, "lbl_mini_loop"):
-                        self.ui_call(self.lbl_mini_loop.configure, text=f"大循环: {self.global_loop_current} / {total_loops}")
+                        self.ui_call(self.lbl_mini_loop.configure, text=f"The Grand Cycle: {self.global_loop_current} / {total_loops}")
 
                     self.race_counter = 0
                     self.car_counter = 0
@@ -1769,7 +1768,7 @@ class FH_UltimateBot(ctk.CTk):
         self.log("Automatic restart mechanism triggered! Launching the game...")
         try:
             cmd_widget = getattr(self, "le_restart_cmd", None)
-            cmd_str = cmd_widget.get() if cmd_widget else self.config.get("restart_cmd", "start steam://run/2483190")
+            cmd_str = cmd_widget.get() if cmd_widget else self.config.get("restart_cmd", "explorer.exe \"msgamelaunch://shortcutlaunch/?productid=9N431PX143P8\"")
             os.system(cmd_str)
         except Exception as e:
             self.log(f"Failed to execute restart command: {e}")
@@ -1793,7 +1792,7 @@ class FH_UltimateBot(ctk.CTk):
                 continue
 
             if getattr(self, "use_ocr", False) and hasattr(self, "reader"):
-                pos_con = self.find_text(self.get_ocr_target("continue_btn"), region=self.regions["全界面"])
+                pos_con = self.find_text(self.get_ocr_target("continue_btn"), region=self.regions["Full Screen"])
             else:
                 pos_con = self.find_any_image(["continue-w.png", "continue-b.png"], threshold=0.6)
             if pos_con:
@@ -1854,7 +1853,7 @@ class FH_UltimateBot(ctk.CTk):
     def is_in_menu(self):
         # [Automatic Dual-Mode Switching]: If OCR is enabled and fully loaded, it will use the text; otherwise, it will use the pure grayscale image.
         if getattr(self, "use_ocr", False) and hasattr(self, "reader"):
-            return self.find_text(self.get_ocr_target("menu_anchor"), region=self.regions["左"])
+            return self.find_text(self.get_ocr_target("menu_anchor"), region=self.regions["Left"])
         
         return self.find_image_gray(
             "collectionjournal.png",
@@ -1868,10 +1867,10 @@ class FH_UltimateBot(ctk.CTk):
         
         # Obtain a multilingual target lexicon
         menu_targets = self.get_ocr_target("menu_anchor")
-        if not menu_targets: menu_targets = ["收集", "Collection"]
+        if not menu_targets: menu_targets = ["Collect", "Collection"]
         
         exit_targets = self.get_ocr_target("exit_btn")
-        if not exit_targets: exit_targets = ["Back", "返回"]
+        if not exit_targets: exit_targets = ["Back", "Return"]
         
         # It takes about 40-60 seconds to try 60 times consecutively.
         for i in range(60):
@@ -1881,9 +1880,9 @@ class FH_UltimateBot(ctk.CTk):
             # 1. Locate the main menu anchor point (dual-mode)
             if getattr(self, "use_ocr", False) and hasattr(self, "reader"):
                 # [Critical Fix]: This function searches for menu_targets and uses find_text for an instant search, instead of waiting for text!
-                pos_menu = self.find_text(menu_targets, region=self.regions["左"])
+                pos_menu = self.find_text(menu_targets, region=self.regions["Left"])
             else:
-                pos_menu = self.find_image_gray("collectionjournal.png", region=self.regions["左"], threshold=0.70, fast_mode=True)
+                pos_menu = self.find_image_gray("collectionjournal.png", region=self.regions["Left"], threshold=0.70, fast_mode=True)
             
             if pos_menu:
                 self.log(f"Successfully located the menu anchor!({i + 1}/60)")
@@ -1893,9 +1892,9 @@ class FH_UltimateBot(ctk.CTk):
             # 2. Locate the back/exit button in the bottom left corner (dual-mode)
             '''
             if getattr(self, "use_ocr", False) and hasattr(self, "reader"):
-                pos_exit = self.find_text(exit_targets, region=self.regions["左下"])
+                pos_exit = self.find_text(exit_targets, region=self.regions["Bottom Left"])
             else:
-                pos_exit = self.find_any_image_gray(["exit.png", "exit-b.png"], region=self.regions["左下"], threshold=0.80)
+                pos_exit = self.find_any_image_gray(["exit.png", "exit-b.png"], region=self.regions["Bottom Left"], threshold=0.80)
                 
             if pos_exit:
                 self.log("Exit/Back button detected, clicked...")
@@ -2262,7 +2261,7 @@ class FH_UltimateBot(ctk.CTk):
             return None
 
         except Exception as e:
-            self.log(f"find_image_in_screen 异常: {e}")
+            self.log(f"find_image_in_screen Error: {e}")
             return None
 
     def find_image(self, template_path, region=None, threshold=0.75, fast_mode=True):
@@ -2349,7 +2348,7 @@ class FH_UltimateBot(ctk.CTk):
                         )
             return None
         except Exception as e:
-            self.log(f"find_image_with_element 异常: {e}")
+            self.log(f"find_image_with_element Error: {e}")
             return None
     def find_image_with_element_stable(
         self,
@@ -2528,7 +2527,7 @@ class FH_UltimateBot(ctk.CTk):
             return None
 
         except Exception as e:
-            self.log(f"find_image_with_element_multi 异常: {e}")
+            self.log(f"find_image_with_element_multi Error: {e}")
             return None
     def find_image_with_element_fast(self, main_path, sub_path, region=None, threshold=0.70, sub_threshold=0.70):
         if not self.is_running:
@@ -2591,7 +2590,7 @@ class FH_UltimateBot(ctk.CTk):
             return None
 
         except Exception as e:
-            self.log(f"find_image_with_element_fast 异常: {e}")
+            self.log(f"find_image_with_element_fast Error: {e}")
             return None
 
     def wait_for_image_with_element_multi(self, main_path, sub_path, region=None, fast_mode=True,
@@ -2925,7 +2924,7 @@ class FH_UltimateBot(ctk.CTk):
                     if pos:
                         return pos
             except Exception as e:
-                self.log(f"wait_for_any_image 异常: {e}")
+                self.log(f"wait_for_any_image Error: {e}")
 
             if log_text:
                 self.log(log_text)
@@ -3048,7 +3047,7 @@ class FH_UltimateBot(ctk.CTk):
         time.sleep(0.8)
 
         if getattr(self, "use_ocr", False) and hasattr(self, "reader"):
-            pos_el = self.wait_for_text(self.get_ocr_target("eventlab"), region=self.regions["全界面"], timeout=5, interval=0.25)
+            pos_el = self.wait_for_text(self.get_ocr_target("eventlab"), region=self.regions["Full Screen"], timeout=5, interval=0.25)
         else:
             pos_el = self.wait_for_image_gray(
                 "eventlab.png",
@@ -3113,11 +3112,11 @@ class FH_UltimateBot(ctk.CTk):
         time.sleep(1.5)
 
         if getattr(self, "use_ocr", False) and hasattr(self, "reader"):
-            pos_ck = self.wait_for_text(self.get_ocr_target("view_event_info"), region=self.regions["下"], timeout=5, interval=0.25)
+            pos_ck = self.wait_for_text(self.get_ocr_target("view_event_info"), region=self.regions["Down"], timeout=5, interval=0.25)
         else:
             pos_ck = self.wait_for_image_gray(
                 "VEI.png",
-                region=self.regions["下"],
+                region=self.regions["Down"],
                 threshold=0.75,
                 timeout=100,
                 interval=1.0,
@@ -3155,9 +3154,9 @@ class FH_UltimateBot(ctk.CTk):
                     return False
                 if getattr(self, "use_ocr", False) and hasattr(self, "reader"):
                     # Read the string to search from the user's config and put it into a list.
-                    pos_brand = self.wait_for_text(self.config.get("skillcarbrand"), region=self.regions["全界面"], timeout=1.2, interval=0.2)
+                    pos_brand = self.wait_for_text(self.config.get("skillcarbrand"), region=self.regions["Full Screen"], timeout=1.2, interval=0.2)
                 else:
-                    pos_brand = self.wait_for_image_gray("skillcarbrand.png", region=self.regions["全界面"], threshold=0.8, timeout=1.2, interval=0.2, fast_mode=True)
+                    pos_brand = self.wait_for_image_gray("skillcarbrand.png", region=self.regions["Full Screen"], threshold=0.8, timeout=1.2, interval=0.2, fast_mode=True)
                 if pos_brand:
                     self.game_click(pos_brand)
                     time.sleep(1.2)
@@ -3218,7 +3217,7 @@ class FH_UltimateBot(ctk.CTk):
 
                 if getattr(self, "use_ocr", False) and hasattr(self, "reader"):
                     target_list = self.get_ocr_target("start_event") or ["Start Competition", "Start", "Start Event"]
-                    pos = self.wait_for_text(target_list, region=self.regions["左下"], timeout=0.7, interval=0.2)
+                    pos = self.wait_for_text(target_list, region=self.regions["Bottom Left"], timeout=0.7, interval=0.2)
                 else:
                     pos = self.wait_for_any_image_gray(
                         ["start.png", "startw.png"],
@@ -3255,11 +3254,11 @@ class FH_UltimateBot(ctk.CTk):
                 if now - last_like_chk >= 3.0:
                     if getattr(self, "use_ocr", False) and hasattr(self, "reader"):
                         # If OCR is enabled, it will intelligently find "likes/thumbs up"
-                        target_list = self.get_ocr_target("like_author") or ["喜欢", "赞", "Like", "like"]
-                        pos_like = self.find_text(target_list, region=self.regions["全界面"])
+                        target_list = self.get_ocr_target("like_author") or ["Thumbs Up", "Like", "like"]
+                        pos_like = self.find_text(target_list, region=self.regions["Full Screen"])
                     else:
                         # If using image recognition, find likeauthor.png
-                        pos_like = self.find_image_gray("likeauthor.png", region=self.regions["全界面"], threshold=0.70, fast_mode=True)
+                        pos_like = self.find_image_gray("likeauthor.png", region=self.regions["Full Screen"], threshold=0.70, fast_mode=True)
                     
                     if pos_like:
                         self.log("The 'like author' page has been detected. Press Enter to confirm!")
@@ -3270,9 +3269,9 @@ class FH_UltimateBot(ctk.CTk):
                 if now - last_chk >= 1.0:
                     if getattr(self, "use_ocr", False) and hasattr(self, "reader"):
                         target_list = self.get_ocr_target("restart") or ["Restart", "Restart", "Restart"]
-                        found_restart = self.find_text(target_list, region=self.regions["下"])
+                        found_restart = self.find_text(target_list, region=self.regions["Down"])
                     else:
-                        found_restart = self.find_image_gray("restart.png", region=self.regions["下"], threshold=0.75, fast_mode=True)
+                        found_restart = self.find_image_gray("restart.png", region=self.regions["Down"], threshold=0.75, fast_mode=True)
                     
                     if found_restart:
                         finished = True
@@ -3312,7 +3311,7 @@ class FH_UltimateBot(ctk.CTk):
         if not self.enter_menu():
             return False
         if getattr(self, "use_ocr", False) and hasattr(self, "reader"):
-            pos_collectionjournal = self.find_text(self.get_ocr_target("menu_anchor"), region=self.regions["左"])
+            pos_collectionjournal = self.find_text(self.get_ocr_target("menu_anchor"), region=self.regions["Left"])
         else:
             pos_collectionjournal = self.wait_for_image_transparent(
                 "collectionjournal.png",
@@ -3330,7 +3329,7 @@ class FH_UltimateBot(ctk.CTk):
         time.sleep(1.0)
 
         if getattr(self, "use_ocr", False) and hasattr(self, "reader"):
-            pos_masterexplorer = self.find_text(self.get_ocr_target("master_explorer"), region=self.regions["全界面"])
+            pos_masterexplorer = self.find_text(self.get_ocr_target("master_explorer"), region=self.regions["Full Screen"])
         else:
             pos_masterexplorer = self.wait_for_image(
                 "masterexplorer.png",
@@ -3348,7 +3347,7 @@ class FH_UltimateBot(ctk.CTk):
         time.sleep(0.6)
 
         if getattr(self, "use_ocr", False) and hasattr(self, "reader"):
-            pos_carcollection = self.find_text(self.get_ocr_target("car_collection"), region=self.regions["全界面"])
+            pos_carcollection = self.find_text(self.get_ocr_target("car_collection"), region=self.regions["Full Screen"])
         else:
             pos_carcollection = self.wait_for_image_transparent(
                 "carcollection.png",
@@ -3374,7 +3373,7 @@ class FH_UltimateBot(ctk.CTk):
                 return False
                 
             if getattr(self, "use_ocr", False) and hasattr(self, "reader"):
-                brand_pos = self.wait_for_text([self.config.get("consumablecarbrand", "斯巴鲁")], region=self.regions["全界面"], timeout=0.8, interval=0.2)
+                brand_pos = self.wait_for_text([self.config.get("consumablecarbrand", "Subaru")], region=self.regions["Full Screen"], timeout=0.8, interval=0.2)
             else:
                 brand_pos = self.wait_for_any_image_gray(
                     ["CCbrand.png"],
@@ -3462,7 +3461,7 @@ class FH_UltimateBot(ctk.CTk):
         self.hw_press("pagedown", delay=0.15)
         time.sleep(1.0)
         if getattr(self, "use_ocr", False) and hasattr(self, "reader"):
-            pos_buycar = self.wait_for_text(self.get_ocr_target("buy_new_and_used"), region=self.regions["左"], timeout=15, interval=0.3)
+            pos_buycar = self.wait_for_text(self.get_ocr_target("buy_new_and_used"), region=self.regions["Left"], timeout=15, interval=0.3)
         else:
             pos_buycar = self.wait_for_image(
                 "BNandUC.png",
@@ -3482,7 +3481,7 @@ class FH_UltimateBot(ctk.CTk):
         time.sleep(5)
 
         if getattr(self, "use_ocr", False) and hasattr(self, "reader"):
-            pos_bs = self.wait_for_text(self.get_ocr_target("buy_and_sell"), region=self.regions["左"], timeout=60, interval=0.5)
+            pos_bs = self.wait_for_text(self.get_ocr_target("buy_and_sell"), region=self.regions["Left"], timeout=60, interval=0.5)
         else:
             pos_bs = self.wait_for_any_image_gray(
                 ["buyandsell-w.png", "buyandsell-b.png"],
@@ -3589,12 +3588,12 @@ class FH_UltimateBot(ctk.CTk):
             pos_rc = None
             
             if getattr(self, "use_ocr", False) and hasattr(self, "reader"):
-                # If OCR is enabled, look for "get_in_car" in the dictionary (usually "乘" or "驾").
-                target_list = self.get_ocr_target("get_in_car") or ["上车", "Get in car"]
-                pos_rc = self.wait_for_text(target_list, region=self.regions["全界面"], timeout=2.5, interval=0.2)
+                # If OCR is enabled, look for "get_in_car" in the dictionary (usually "Ride" or "Loop").
+                target_list = self.get_ocr_target("get_in_car") or ["Get In", "Get in car"]
+                pos_rc = self.wait_for_text(target_list, region=self.regions["Full Screen"], timeout=2.5, interval=0.2)
             else:
                 # Image mode, looking for rc.png
-                pos_rc = self.wait_for_image_gray("rc.png", region=self.regions["全界面"], threshold=0.70, timeout=2.5, interval=0.2, fast_mode=True)
+                pos_rc = self.wait_for_image_gray("rc.png", region=self.regions["Full Screen"], threshold=0.70, timeout=2.5, interval=0.2, fast_mode=True)
                 
             if pos_rc:
                 self.log("Click to get on the bus")
@@ -3614,9 +3613,9 @@ class FH_UltimateBot(ctk.CTk):
                     return False
 
                 if getattr(self, "use_ocr", False) and hasattr(self, "reader"):
-                    pos_sjy = self.find_text(self.get_ocr_target("upgrades_and_tuning"), region=self.regions["左下"])
+                    pos_sjy = self.find_text(self.get_ocr_target("upgrades_and_tuning"), region=self.regions["Bottom Left"])
                 else:
-                    pos_sjy = self.find_any_image_gray(["UandT-w.png", "UandT-b.png"], region=self.regions["左下"], threshold=0.70)
+                    pos_sjy = self.find_any_image_gray(["UandT-w.png", "UandT-b.png"], region=self.regions["Bottom Left"], threshold=0.70)
                 if pos_sjy:
                     break
 
@@ -3630,9 +3629,9 @@ class FH_UltimateBot(ctk.CTk):
             self.game_click(pos_sjy)
             time.sleep(0.5)
             if getattr(self, "use_ocr", False) and hasattr(self, "reader"):
-                pos_cls = self.wait_for_text(self.get_ocr_target("car_mastery"), region=self.regions["左下"], timeout=20, interval=0.5)
+                pos_cls = self.wait_for_text(self.get_ocr_target("car_mastery"), region=self.regions["Bottom Left"], timeout=20, interval=0.5)
             else:
-                pos_cls = self.wait_for_any_image_gray(["clsldcnw.png", "clsldcnb.png"], region=self.regions["左下"], threshold=0.70, timeout=20)
+                pos_cls = self.wait_for_any_image_gray(["clsldcnw.png", "clsldcnb.png"], region=self.regions["Bottom Left"], threshold=0.70, timeout=20)
             self.game_click(pos_cls)
             time.sleep(1.5)
 
@@ -3660,9 +3659,9 @@ class FH_UltimateBot(ctk.CTk):
                     self.hw_press("enter")
                     time.sleep(1.2)
                 if getattr(self, "use_ocr", False) and hasattr(self, "reader"):
-                    spne_found = self.find_text(self.get_ocr_target("not_enough_sp"), region=self.regions["全界面"])
+                    spne_found = self.find_text(self.get_ocr_target("not_enough_sp"), region=self.regions["Full Screen"])
                 else:
-                    spne_found = self.find_image_gray("SPNE.png", region=self.regions["全界面"], threshold=0.70)
+                    spne_found = self.find_image_gray("SPNE.png", region=self.regions["Full Screen"], threshold=0.70)
                 
                 if spne_found:
                     self.log("No skill points available or all skills have been used up, lottery ends early!")
@@ -3708,9 +3707,9 @@ class FH_UltimateBot(ctk.CTk):
         time.sleep(1.0)
 
         if getattr(self, "use_ocr", False) and hasattr(self, "reader"):
-            pos_buycar = self.wait_for_text(self.get_ocr_target("buy_new_and_used"), region=self.regions["左"], timeout=12, interval=0.3)
+            pos_buycar = self.wait_for_text(self.get_ocr_target("buy_new_and_used"), region=self.regions["Left"], timeout=12, interval=0.3)
         else:
-            pos_buycar = self.wait_for_image("BNandUC.png", region=self.regions["左"], threshold=0.70, timeout=12, interval=0.3, fast_mode=True)
+            pos_buycar = self.wait_for_image("BNandUC.png", region=self.regions["Left"], threshold=0.70, timeout=12, interval=0.3, fast_mode=True)
         if not pos_buycar:
             self.log("No new or used car purchases detected")
             return False
@@ -3721,9 +3720,9 @@ class FH_UltimateBot(ctk.CTk):
         time.sleep(5)
 
         if getattr(self, "use_ocr", False) and hasattr(self, "reader"):
-            pos_bs = self.wait_for_text(self.get_ocr_target("buy_and_sell"), region=self.regions["上"], timeout=40, interval=0.5)
+            pos_bs = self.wait_for_text(self.get_ocr_target("buy_and_sell"), region=self.regions["Up"], timeout=40, interval=0.5)
         else:
-            pos_bs = self.wait_for_any_image(["buyandsell-w.png", "buyandsell-b.png"], region=self.regions["上"], threshold=0.75, timeout=40, interval=0.5, fast_mode=True)
+            pos_bs = self.wait_for_any_image(["buyandsell-w.png", "buyandsell-b.png"], region=self.regions["Up"], threshold=0.75, timeout=40, interval=0.5, fast_mode=True)
         if not pos_bs:
             self.log("No buy or sell items found")
             return False
@@ -3749,15 +3748,15 @@ class FH_UltimateBot(ctk.CTk):
         self.move_to_game_coord(5, 5)
         time.sleep(0.2)
         if getattr(self, "use_ocr", False) and hasattr(self, "reader"):
-            pos = self.wait_for_text(self.get_ocr_target("get_in_car"), region=self.regions["全界面"], timeout=5, interval=0.2)
+            pos = self.wait_for_text(self.get_ocr_target("get_in_car"), region=self.regions["Full Screen"], timeout=5, interval=0.2)
         else:
-            pos = self.wait_for_image("rc.png", region=self.regions["全界面"], threshold=0.65, timeout=5, interval=0.2, fast_mode=True)
+            pos = self.wait_for_image("rc.png", region=self.regions["Full Screen"], threshold=0.65, timeout=5, interval=0.2, fast_mode=True)
         if pos:
             self.log("Found the boarding route, clicked")
             self.game_click(pos) # [Important Fix]: Previously, self.safe_click was used, causing an error and crash. This has now been fixed.
             time.sleep(2.0)
         else:
-            self.log("The vehicle has been driven, or no image was found. Execute ESC twice")
+            self.log("The vehicle has been Loopn, or no image was found. Execute ESC twice")
             self.hw_press("esc")
             time.sleep(1.5)
             self.hw_press("esc")
@@ -3768,9 +3767,9 @@ class FH_UltimateBot(ctk.CTk):
             if not self.is_running:
                 return False
             if getattr(self, "use_ocr", False) and hasattr(self, "reader"):
-                pos = self.wait_for_text(self.get_ocr_target("buy_and_sell"), region=self.regions["上"], timeout=0.8, interval=0.2)
+                pos = self.wait_for_text(self.get_ocr_target("buy_and_sell"), region=self.regions["Up"], timeout=0.8, interval=0.2)
             else:
-                pos = self.wait_for_any_image(["buyandsell-b.png", "buyandsell-w.png"], region=self.regions["上"], threshold=0.70, timeout=0.8, interval=0.2, fast_mode=True)
+                pos = self.wait_for_any_image(["buyandsell-b.png", "buyandsell-w.png"], region=self.regions["Up"], threshold=0.70, timeout=0.8, interval=0.2, fast_mode=True)
             if pos:
                 self.log(f"The {i + 1}th purchase and sale were detected, and the vehicle interface was entered")
                 self.hw_press("enter")
@@ -3854,9 +3853,9 @@ class FH_UltimateBot(ctk.CTk):
         time.sleep(1.0)
 
         if getattr(self, "use_ocr", False) and hasattr(self, "reader"):
-            pos_buycar = self.wait_for_text(self.get_ocr_target("buy_new_and_used"), region=self.regions["左"], timeout=12, interval=0.3)
+            pos_buycar = self.wait_for_text(self.get_ocr_target("buy_new_and_used"), region=self.regions["Left"], timeout=12, interval=0.3)
         else:
-            pos_buycar = self.wait_for_image("BNandUC.png", region=self.regions["左"], threshold=0.70, timeout=12, interval=0.3, fast_mode=True)
+            pos_buycar = self.wait_for_image("BNandUC.png", region=self.regions["Left"], threshold=0.70, timeout=12, interval=0.3, fast_mode=True)
         if not pos_buycar:
             self.log("No new or used car purchases detected")
             return False
@@ -3867,9 +3866,9 @@ class FH_UltimateBot(ctk.CTk):
         time.sleep(5)
 
         if getattr(self, "use_ocr", False) and hasattr(self, "reader"):
-            pos_bs = self.wait_for_text(self.get_ocr_target("buy_and_sell"), region=self.regions["上"], timeout=40, interval=0.5)
+            pos_bs = self.wait_for_text(self.get_ocr_target("buy_and_sell"), region=self.regions["Up"], timeout=40, interval=0.5)
         else:
-            pos_bs = self.wait_for_any_image(["buyandsell-w.png", "buyandsell-b.png"], region=self.regions["上"], threshold=0.75, timeout=40, interval=0.5, fast_mode=True)
+            pos_bs = self.wait_for_any_image(["buyandsell-w.png", "buyandsell-b.png"], region=self.regions["Up"], threshold=0.75, timeout=40, interval=0.5, fast_mode=True)
         if not pos_bs:
             self.log("No buy or sell items found")
             return False
@@ -3895,15 +3894,15 @@ class FH_UltimateBot(ctk.CTk):
         self.move_to_game_coord(5, 5)
         time.sleep(0.2)
         if getattr(self, "use_ocr", False) and hasattr(self, "reader"):
-            pos = self.wait_for_text(self.get_ocr_target("get_in_car"), region=self.regions["全界面"], timeout=5, interval=0.2)
+            pos = self.wait_for_text(self.get_ocr_target("get_in_car"), region=self.regions["Full Screen"], timeout=5, interval=0.2)
         else:
-            pos = self.wait_for_image("rc.png", region=self.regions["全界面"], threshold=0.65, timeout=5, interval=0.2, fast_mode=True)
+            pos = self.wait_for_image("rc.png", region=self.regions["Full Screen"], threshold=0.65, timeout=5, interval=0.2, fast_mode=True)
         if pos:
             self.log("Found the boarding route, clicked")
             self.game_click(pos) # [Important Fix]: Previously, self.safe_click was used, causing an error and crash. This has now been fixed.
             time.sleep(2.0)
         else:
-            self.log("The vehicle has been driven, or no image was found. Execute ESC twice")
+            self.log("The vehicle has been Loopn, or no image was found. Execute ESC twice")
             self.hw_press("esc")
             time.sleep(1.5)
             self.hw_press("esc")
@@ -3914,9 +3913,9 @@ class FH_UltimateBot(ctk.CTk):
             if not self.is_running:
                 return False
             if getattr(self, "use_ocr", False) and hasattr(self, "reader"):
-                pos = self.wait_for_text(self.get_ocr_target("buy_and_sell"), region=self.regions["上"], timeout=0.8, interval=0.2)
+                pos = self.wait_for_text(self.get_ocr_target("buy_and_sell"), region=self.regions["Up"], timeout=0.8, interval=0.2)
             else:
-                pos = self.wait_for_any_image(["buyandsell-b.png", "buyandsell-w.png"], region=self.regions["上"], threshold=0.70, timeout=0.8, interval=0.2, fast_mode=True)
+                pos = self.wait_for_any_image(["buyandsell-b.png", "buyandsell-w.png"], region=self.regions["Up"], threshold=0.70, timeout=0.8, interval=0.2, fast_mode=True)
             if pos:
                 self.log(f"The {i + 1}th purchase and sale were detected, and the vehicle interface was entered")
                 self.hw_press("enter")
