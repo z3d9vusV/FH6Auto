@@ -9,23 +9,23 @@ set MAIN_FILE=main.py
 
 echo.
 echo ==============================
-echo 开始打包 %APP_NAME%
+echo Starting to package %APP_NAME%
 echo ==============================
 echo.
 
 where python >nul 2>nul
 if errorlevel 1 (
-    echo [错误] 未找到 python，请先配置环境变量
+    echo [Error] Python not found. Please configure the environment variables first
     pause
     exit /b 1
 )
 
-echo [1/3] 清理旧文件...
+echo [1/3] Cleaning up old files...
 if exist build rmdir /s /q build
 if exist dist rmdir /s /q dist
 if exist "%APP_NAME%.spec" del /f /q "%APP_NAME%.spec"
 
-echo [2/3] 执行 PyInstaller...
+echo [2/3] Running PyInstaller...
 python -m PyInstaller ^
     -n "%APP_NAME%" ^
     -F ^
@@ -38,13 +38,13 @@ python -m PyInstaller ^
 
 if errorlevel 1 (
     echo.
-    echo [错误] 打包失败！
+    echo [Error] Packaging failed!
     pause
     exit /b 1
 )
 
 echo.
-echo [3/3] 打包完成！
-echo 输出目录: dist\%APP_NAME%.exe
+echo [3/3] Packaging complete!
+echo Output directory: dist\%APP_NAME%.exe
 echo.
 pause
