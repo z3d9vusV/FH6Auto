@@ -21,7 +21,7 @@
     ],
     "share_code": "890169683",
     "auto_restart": true,
-    "restart_cmd": "start steam://run/2483190",
+    "restart_cmd": "explorer.exe \"msgamelaunch://shortcutlaunch/?productid=9N431PX143P8\"",
     "sell_mode": 1,
     "use_ocr": false,
     "ocr_lang": "eng",
